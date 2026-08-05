@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 620" role="img" aria-labelledby="title desc">
+  <title id="title">Пример изображения игры</title>
+  <desc id="desc">Абстрактная иллюстрация музыкальной викторины</desc>
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D9FF62"/>
+      <stop offset="1" stop-color="#AEE936"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="#1B1121" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M135 388c-35 18-58 49-58 84 0 67 81 121 182 121s184-54 184-121c0-38-27-72-69-94" fill="url(#body)" stroke-width="14"/>
+    <path d="M146 403c26-80 75-122 115-122 44 0 91 43 117 124" fill="#F7F7F4" stroke-width="14"/>
+    <circle cx="260" cy="170" r="113" fill="#F7F7F4" stroke-width="14"/>
+    <path d="M153 132c13-60 56-101 108-101 51 0 95 42 107 102-34-20-69-30-106-30-39 0-75 10-109 29Z" fill="#7E0AD1" stroke-width="14"/>
+    <path d="M210 171h1M310 171h1" stroke-width="20"/>
+    <path d="M219 224c29 24 56 24 84 0" stroke-width="13"/>
+    <path d="m86 306 97 72M437 300l-98 77" stroke-width="21"/>
+    <circle cx="75" cy="294" r="37" fill="#7E0AD1" stroke-width="13"/>
+    <circle cx="448" cy="288" r="37" fill="#7E0AD1" stroke-width="13"/>
+    <path d="M152 520h216M178 556h165" stroke-width="14"/>
+  </g>
+  <g fill="#7E0AD1">
+    <path d="M32 72c32-6 53-24 64-55 9 31 30 49 62 55-32 8-53 26-62 56-11-30-32-48-64-56Z"/>
+    <path d="M393 68c20-4 34-16 40-36 7 20 20 32 41 36-21 5-34 17-41 37-6-20-20-32-40-37Z"/>
+  </g>
+</svg>

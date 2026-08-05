@@ -1,0 +1,70 @@
+<!--
+  NEXT GAME TICKET — вставьте весь фрагмент в HTML-элемент Zero Block.
+
+  РЕДАКТИРУЮТСЯ ТОЛЬКО ДВА URL НИЖЕ:
+  1) endpoint — production URL Google Apps Script с окончанием /exec
+  2) src последнего script — URL ticket-widget.js на GitHub Pages или jsDelivr
+
+  Рекомендуемая высота HTML-элемента в Zero Block:
+  1200/980: 520–580 px · 640: 340–420 px · 480: 1100 px · 320: 820 px.
+  Сам HTML-элемент поставьте по центру и дайте ему ширину 100% Window Container.
+-->
+
+<div id="next-game-ticket-host">
+  <next-game-ticket aria-label="Ближайшая игра"></next-game-ticket>
+</div>
+
+<style>
+  /* Локальные параметры контейнера Tilda — при необходимости меняются здесь. */
+  #next-game-ticket-host {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    overflow: visible;
+  }
+
+  #next-game-ticket-host next-game-ticket {
+    display: block;
+    width: 100%;
+  }
+</style>
+
+<script>
+  /*
+   * РЕДАКТИРУЕМЫЙ ПАРАМЕТР №1.
+   * Пример: https://script.google.com/macros/s/AKfycb.../exec
+   */
+  window.NEXT_GAME_TICKET_CONFIG = {
+    endpoint: "",
+
+    /*
+     * Fallback показывается мгновенно и остаётся, если API временно недоступен.
+     * Обычно его достаточно один раз привести к актуальному виду.
+     */
+    fallback: {
+      price: "800₽",
+      game_title: "МЕЛОМАНИЯ",
+      address: "ул. Квизалендова, 19",
+      date_iso: "2026-07-13",
+      date_day: "13",
+      date_month: "ИЮЛЯ",
+      time: "13:00",
+      button_label: "ИДУ ИГРАТЬ",
+      button_url: "https://example.com/",
+      share_url: "https://example.com/"
+    }
+  };
+</script>
+
+<!--
+  РЕДАКТИРУЕМЫЙ ПАРАМЕТР №2.
+  GitHub Pages:
+  https://USER.github.io/REPOSITORY/widget/ticket-widget.js
+
+  или версия через jsDelivr:
+  https://cdn.jsdelivr.net/gh/USER/REPOSITORY@v1.0.0/widget/ticket-widget.js
+-->
+<script
+  src="https://USER.github.io/REPOSITORY/widget/ticket-widget.js"
+  defer
+></script>

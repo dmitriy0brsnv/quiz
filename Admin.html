@@ -1,0 +1,1292 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #24152d;
+        --muted: #756d79;
+        --line: #e4e0e7;
+        --panel: #ffffff;
+        --page: #f4f2f6;
+        --accent: #7e0ad1;
+        --accent-soft: #f0e2fa;
+        --lime: #d9ff62;
+        --danger: #b42318;
+        --success: #157347;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-width: 320px;
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+      }
+
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
+      }
+
+      button {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 68px;
+        padding: 14px clamp(18px, 4vw, 52px);
+        border-bottom: 1px solid rgba(36, 21, 45, 0.08);
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(18px);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .brand__mark {
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        width: 38px;
+        aspect-ratio: 1;
+        border-radius: 12px;
+        background: var(--accent);
+        color: var(--lime);
+        font-weight: 900;
+      }
+
+      .brand strong,
+      .brand small {
+        display: block;
+      }
+
+      .brand strong {
+        font-size: 15px;
+      }
+
+      .brand small {
+        margin-top: 2px;
+        overflow: hidden;
+        color: var(--muted);
+        font-size: 12px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .updated {
+        color: var(--muted);
+        font-size: 12px;
+        text-align: right;
+      }
+
+      .login {
+        display: grid;
+        place-items: center;
+        min-height: calc(100vh - 69px);
+        padding: 28px 18px;
+      }
+
+      .login__card {
+        width: min(100%, 430px);
+        padding: clamp(24px, 6vw, 42px);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: var(--panel);
+        box-shadow: 0 24px 70px rgba(45, 26, 56, 0.11);
+      }
+
+      h1,
+      h2,
+      p {
+        margin-top: 0;
+      }
+
+      .login h1 {
+        margin-bottom: 10px;
+        font-size: clamp(27px, 6vw, 38px);
+        letter-spacing: -0.045em;
+        line-height: 1;
+      }
+
+      .login p {
+        margin-bottom: 24px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .workspace {
+        width: min(1480px, 100%);
+        margin: 0 auto;
+        padding: 30px clamp(18px, 4vw, 52px) 80px;
+      }
+
+      .workspace[hidden],
+      .login[hidden] {
+        display: none;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 0.96fr) minmax(420px, 1.04fr);
+        align-items: start;
+        gap: 28px;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--panel);
+        box-shadow: 0 10px 36px rgba(45, 26, 56, 0.06);
+      }
+
+      .form-panel {
+        overflow: hidden;
+      }
+
+      .form-section {
+        padding: 26px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .form-section:last-child {
+        border-bottom: 0;
+      }
+
+      .form-section h2 {
+        margin-bottom: 6px;
+        font-size: 18px;
+        letter-spacing: -0.025em;
+      }
+
+      .section-note {
+        margin-bottom: 20px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .fields {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .field {
+        display: grid;
+        align-content: start;
+        gap: 7px;
+        min-width: 0;
+      }
+
+      .field--full {
+        grid-column: 1 / -1;
+      }
+
+      .field label,
+      .field__label {
+        color: #43394a;
+        font-size: 12px;
+        font-weight: 760;
+      }
+
+      .field small {
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
+      input[type="text"],
+      input[type="password"],
+      input[type="url"],
+      input[type="date"],
+      input[type="time"],
+      input[type="number"],
+      textarea {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 12px;
+        border: 1px solid #d7d1db;
+        border-radius: 12px;
+        outline: none;
+        background: #fff;
+        color: var(--ink);
+        transition: border-color 150ms ease, box-shadow 150ms ease;
+      }
+
+      textarea {
+        min-height: 78px;
+        resize: vertical;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-soft);
+      }
+
+      .color-control {
+        display: grid;
+        grid-template-columns: 46px minmax(0, 1fr);
+        gap: 8px;
+      }
+
+      input[type="color"] {
+        width: 46px;
+        height: 44px;
+        padding: 4px;
+        border: 1px solid #d7d1db;
+        border-radius: 12px;
+        background: #fff;
+        cursor: pointer;
+      }
+
+      .range-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 48px;
+        align-items: center;
+        gap: 10px;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      .range-value {
+        color: var(--muted);
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+
+      .switch {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 44px;
+        cursor: pointer;
+      }
+
+      .switch input {
+        width: 20px;
+        height: 20px;
+        accent-color: var(--accent);
+      }
+
+      .actions {
+        position: sticky;
+        bottom: 16px;
+        z-index: 10;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 18px;
+        padding: 14px;
+        border: 1px solid rgba(36, 21, 45, 0.10);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.91);
+        box-shadow: 0 18px 44px rgba(45, 26, 56, 0.14);
+        backdrop-filter: blur(16px);
+      }
+
+      .button {
+        display: inline-grid;
+        place-items: center;
+        min-height: 44px;
+        padding: 10px 18px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform 140ms ease, opacity 140ms ease;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+      }
+
+      .button:active {
+        transform: translateY(1px);
+      }
+
+      .button:disabled {
+        cursor: wait;
+        opacity: 0.55;
+      }
+
+      .button--wide {
+        width: 100%;
+      }
+
+      .button--secondary {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--ink);
+      }
+
+      .preview-panel {
+        position: sticky;
+        top: 94px;
+        overflow: hidden;
+      }
+
+      .preview-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .preview-head h2 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .segmented {
+        display: flex;
+        gap: 4px;
+        padding: 4px;
+        border-radius: 999px;
+        background: var(--page);
+      }
+
+      .segmented button {
+        padding: 6px 10px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .segmented button.is-active {
+        background: #fff;
+        color: var(--ink);
+        box-shadow: 0 2px 8px rgba(36, 21, 45, 0.10);
+      }
+
+      .preview-stage {
+        display: grid;
+        place-items: center;
+        min-height: 440px;
+        padding: 36px 22px;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 24% 22%, rgba(126, 10, 209, 0.12), transparent 34%),
+          #17131b;
+      }
+
+      .preview-ticket {
+        --p-ticket: #f5f6f8;
+        --p-price: #7e0ad1;
+        --p-title: #7e0ad1;
+        --p-address: #7e0ad1;
+        --p-date-bg: #7e0ad1;
+        --p-date-text: #fff;
+        --p-button-bg: #7e0ad1;
+        --p-button-text: #d9ff62;
+        --p-share-bg: #7e0ad1;
+        --p-share-icon: #d9ff62;
+        --p-image-bg: transparent;
+        --p-texture: none;
+        --p-texture-opacity: .32;
+        position: relative;
+        display: grid;
+        grid-template-columns: 40% 30% 30%;
+        width: min(100%, 660px);
+        aspect-ratio: 980 / 400;
+        overflow: hidden;
+        border-radius: 25px;
+        background: var(--p-ticket);
+        box-shadow: 0 22px 50px rgba(0, 0, 0, 0.25);
+        color: var(--p-title);
+        font-family: var(--p-font, Arial, sans-serif);
+        isolation: isolate;
+      }
+
+      .preview-ticket::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background-image: var(--p-texture);
+        background-size: cover;
+        mix-blend-mode: multiply;
+        opacity: var(--p-texture-opacity);
+        pointer-events: none;
+      }
+
+      .preview-ticket::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 70%;
+        z-index: 1;
+        width: 2px;
+        background: repeating-linear-gradient(
+          to bottom,
+          transparent 0 8px,
+          rgba(23, 19, 27, 0.62) 8px 13px
+        );
+        pointer-events: none;
+      }
+
+      .preview-ticket > * {
+        position: relative;
+        z-index: 2;
+      }
+
+      .p-info {
+        display: grid;
+        grid-template-rows: 30% 27% 43%;
+        min-width: 0;
+        padding: 9% 4% 8% 12%;
+      }
+
+      .p-price-row {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .p-price {
+        overflow: hidden;
+        color: var(--p-price);
+        font-size: clamp(24px, 4.6vw, 56px);
+        font-weight: 950;
+        letter-spacing: -0.07em;
+        line-height: .9;
+        white-space: nowrap;
+      }
+
+      .p-share {
+        display: grid;
+        place-items: center;
+        flex: 0 0 15%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--p-share-bg);
+        color: var(--p-share-icon);
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .p-address {
+        align-self: center;
+        overflow: hidden;
+        color: var(--p-address);
+        font-size: clamp(9px, 1.4vw, 17px);
+        font-weight: 800;
+        line-height: 1.1;
+      }
+
+      .p-title {
+        align-self: end;
+        max-height: 100%;
+        overflow: hidden;
+        color: var(--p-title);
+        font-size: clamp(20px, 4.4vw, 52px);
+        font-weight: 950;
+        letter-spacing: -0.07em;
+        line-height: .79;
+        text-transform: uppercase;
+        overflow-wrap: anywhere;
+      }
+
+      .p-art {
+        display: grid;
+        place-items: center;
+        margin: 9% 4% 9% 0;
+        padding: 10px;
+        overflow: hidden;
+        border-radius: 12px;
+        background: var(--p-image-bg);
+      }
+
+      .p-art img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .p-art span {
+        color: rgba(36, 21, 45, 0.42);
+        font-size: 10px;
+        font-weight: 800;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .p-stub {
+        display: grid;
+        grid-template-rows: 58% 42%;
+        place-items: center;
+        padding: 0 11% 8%;
+      }
+
+      .p-date {
+        display: grid;
+        align-content: center;
+        width: 72%;
+        height: 100%;
+        border-radius: 0 0 24px 24px;
+        background: var(--p-date-bg);
+        color: var(--p-date-text);
+        font-weight: 950;
+        line-height: .9;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .p-date small {
+        font-size: clamp(8px, 1.2vw, 14px);
+      }
+
+      .p-date strong {
+        font-size: clamp(32px, 6vw, 70px);
+        letter-spacing: -.1em;
+      }
+
+      .p-date span {
+        font-size: clamp(9px, 1.35vw, 16px);
+      }
+
+      .p-button {
+        display: grid;
+        place-items: center;
+        width: 86%;
+        min-height: 35%;
+        padding: 8px;
+        border-radius: 999px;
+        background: var(--p-button-bg);
+        color: var(--p-button-text);
+        font-size: clamp(8px, 1.1vw, 13px);
+        font-weight: 950;
+        text-align: center;
+      }
+
+      .preview-stage.is-mobile {
+        min-height: 720px;
+      }
+
+      .preview-stage.is-mobile .preview-ticket {
+        grid-template-columns: 48% 52%;
+        grid-template-rows: 42% 29% 29%;
+        width: min(78%, 300px);
+        aspect-ratio: 400 / 980;
+        border-radius: 28px;
+      }
+
+      .preview-stage.is-mobile .preview-ticket::after {
+        top: 71%;
+        right: 0;
+        bottom: auto;
+        left: 0;
+        width: auto;
+        height: 2px;
+        background: repeating-linear-gradient(
+          to right,
+          transparent 0 8px,
+          rgba(23, 19, 27, 0.62) 8px 13px
+        );
+      }
+
+      .preview-stage.is-mobile .p-info {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        padding: 17% 10% 5%;
+      }
+
+      .preview-stage.is-mobile .p-price {
+        font-size: 38px;
+      }
+
+      .preview-stage.is-mobile .p-address {
+        font-size: 12px;
+      }
+
+      .preview-stage.is-mobile .p-title {
+        font-size: 31px;
+      }
+
+      .preview-stage.is-mobile .p-art {
+        grid-column: 2;
+        grid-row: 2;
+        margin: 0 8% 10% 0;
+      }
+
+      .preview-stage.is-mobile .p-stub {
+        display: contents;
+      }
+
+      .preview-stage.is-mobile .p-date {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: center;
+        width: 70%;
+        height: 82%;
+        border-radius: 0 0 25px 25px;
+      }
+
+      .preview-stage.is-mobile .p-button {
+        grid-column: 1 / -1;
+        grid-row: 3;
+        align-self: center;
+        justify-self: center;
+        width: 74%;
+        min-height: 26%;
+        font-size: 11px;
+      }
+
+      .message {
+        min-height: 19px;
+        margin-top: 10px;
+        color: var(--danger);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .message.is-success {
+        color: var(--success);
+      }
+
+      .toast {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 50;
+        max-width: min(360px, calc(100vw - 40px));
+        padding: 13px 16px;
+        border-radius: 14px;
+        background: #17131b;
+        color: #fff;
+        box-shadow: 0 16px 44px rgba(0, 0, 0, 0.22);
+        font-size: 13px;
+        font-weight: 700;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(8px);
+        transition: opacity 160ms ease, transform 160ms ease;
+      }
+
+      .toast.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 1050px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .preview-panel {
+          position: static;
+          grid-row: 1;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .topbar {
+          align-items: flex-start;
+        }
+
+        .updated {
+          max-width: 110px;
+        }
+
+        .workspace {
+          padding-inline: 12px;
+        }
+
+        .fields {
+          grid-template-columns: 1fr;
+        }
+
+        .field--full {
+          grid-column: auto;
+        }
+
+        .form-section {
+          padding: 22px 18px;
+        }
+
+        .preview-stage {
+          min-height: 300px;
+          padding: 24px 12px;
+        }
+
+        .actions {
+          bottom: 8px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true">Б</span>
+        <span>
+          <strong>Ближайшая игра</strong>
+          <small>Google Sheets · Apps Script · Tilda</small>
+        </span>
+      </div>
+      <span class="updated" id="updatedAt">Не авторизовано</span>
+    </header>
+
+    <main>
+      <section class="login" id="loginView">
+        <form class="login__card" id="loginForm">
+          <h1>Вход в админку</h1>
+          <p>
+            Введите пароль, созданный при первичной настройке Google Таблицы.
+            Он хранится только в памяти этой вкладки.
+          </p>
+          <div class="field">
+            <label for="adminPassword">Пароль</label>
+            <input
+              id="adminPassword"
+              name="adminPassword"
+              type="password"
+              minlength="12"
+              autocomplete="current-password"
+              required
+            >
+          </div>
+          <button class="button button--wide" id="loginButton" type="submit">
+            Открыть настройки
+          </button>
+          <div class="message" id="loginMessage" role="alert"></div>
+        </form>
+      </section>
+
+      <section class="workspace" id="workspace" hidden>
+        <div class="layout">
+          <form class="panel form-panel" id="configForm">
+            <section class="form-section">
+              <h2>Контент</h2>
+              <p class="section-note">
+                Заголовок и адрес автоматически уменьшаются в фиксированных контейнерах.
+                Переносы строк можно задать клавишей Enter.
+              </p>
+              <div class="fields">
+                <div class="field">
+                  <label for="price">Цена</label>
+                  <input id="price" name="price" type="text" maxlength="40" required>
+                </div>
+                <div class="field">
+                  <label for="game_title">Название игры</label>
+                  <textarea id="game_title" name="game_title" maxlength="100" required></textarea>
+                </div>
+                <div class="field field--full">
+                  <label for="address">Адрес</label>
+                  <textarea id="address" name="address" maxlength="180" required></textarea>
+                </div>
+                <div class="field">
+                  <label for="date_iso">Дата</label>
+                  <input id="date_iso" name="date_iso" type="date" required>
+                </div>
+                <div class="field">
+                  <label for="time">Время</label>
+                  <input id="time" name="time" type="time" required>
+                </div>
+                <div class="field">
+                  <label for="button_label">Текст кнопки</label>
+                  <input id="button_label" name="button_label" type="text" maxlength="40" required>
+                </div>
+                <div class="field">
+                  <label for="font_family">Шрифт</label>
+                  <input id="font_family" name="font_family" type="text" maxlength="160" required>
+                  <small>Шрифт должен быть уже подключён на странице Tilda.</small>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <h2>Ссылки и изображения</h2>
+              <p class="section-note">
+                Используйте только HTTPS-ссылки. Для GitHub подходят GitHub Pages
+                или jsDelivr; raw.githubusercontent.com для JS использовать не нужно.
+              </p>
+              <div class="fields">
+                <div class="field field--full">
+                  <label for="image_url">Изображение игры</label>
+                  <input id="image_url" name="image_url" type="url" maxlength="1000">
+                  <small>Всегда показывается целиком, с внутренним отступом 10 px.</small>
+                </div>
+                <div class="field field--full">
+                  <label for="image_alt">Описание изображения (alt)</label>
+                  <input id="image_alt" name="image_alt" type="text" maxlength="180">
+                </div>
+                <div class="field field--full">
+                  <label for="button_url">Ссылка кнопки «Иду играть»</label>
+                  <input id="button_url" name="button_url" type="url" maxlength="1000" required>
+                </div>
+                <div class="field field--full">
+                  <label for="share_url">Ссылка для кнопки «Поделиться»</label>
+                  <input id="share_url" name="share_url" type="url" maxlength="1000" required>
+                  <small>На ПК копируется, на мобильном открывается системное меню Share.</small>
+                </div>
+                <div class="field field--full">
+                  <label for="geo_icon_url">SVG-иконка геометки</label>
+                  <input id="geo_icon_url" name="geo_icon_url" type="url" maxlength="1000">
+                  <small>Если оставить пустым, будет использована встроенная иконка.</small>
+                </div>
+                <div class="field field--full">
+                  <label for="texture_url">Текстура бумаги</label>
+                  <input id="texture_url" name="texture_url" type="url" maxlength="1000">
+                  <small>Текстура накладывается только внутри SVG-маски билета.</small>
+                </div>
+                <div class="field field--full">
+                  <span class="field__label">Прозрачность текстуры</span>
+                  <div class="range-row">
+                    <input
+                      id="texture_opacity"
+                      name="texture_opacity"
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                    >
+                    <output class="range-value" id="textureOpacityValue">0.32</output>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <h2>Цвета</h2>
+              <p class="section-note">
+                Hover кнопок автоматически меняет местами фон и текст. Active сохраняет
+                инверсию и увеличивает насыщенность.
+              </p>
+              <div class="fields" id="colorFields">
+                <div class="field" data-color-field="ticket_background_color">
+                  <span class="field__label">Фон билета</span>
+                  <div class="color-control">
+                    <input type="color" data-color-picker aria-label="Выбрать цвет фона билета">
+                    <input name="ticket_background_color" type="text" maxlength="7">
+                  </div>
+                </div>
+                <div class="field" data-color-field="price_color">
+                  <span class="field__label">Цена</span>
+                  <div class="color-control">
+                    <input type="color" data-color-picker aria-label="Выбрать цвет цены">
+                    <input name="price_color" type="text" maxlength="7">
+                  </div>
+                </div>
+                <div class="field" data-color-field="title_color">
+                  <span class="field__label">Название</span>
+                  <div class="color-control">
+                    <input type="color" data-color-picker aria-label="Выбрать цвет названия">
+                    <input name="title_color" type="text" maxlength="7">
+                  </div>
+                </div>
+                <div class="field" data-color-field="address_color">
+                  <span class="field__label">Адрес</span>
+                  <div class="color-control">
+                    <input type="color" data-color-picker aria-label="Выбрать цвет адреса">
+                    <input name="address_color" type="text" maxlength="7">
+                  </div>
+                </div>
+                <div class="field" data-color-field="date_background_color">
+                  <span class="field__label">Фон даты</span>
+                  <div class="color-control">
+                    <input type="color" data-color-picker aria-label="Выбрать фон даты">
+                    <input name="date_background_color" type="text" maxlength="7">
+                  </div>
+                </div>
+                <div class="field" data-color-field="date_text_color">
+                  <span class="field__label">Текст даты</span>
+                  <div class="color-control">
+                    <input type="color" data-color-picker aria-label="Выбрать текст даты">
+                    <input name="date_text_color" type="text" maxlength="7">
+                  </div>
+                </div>
+                <div class="field" data-color-field="button_background_color">
+                  <span class="field__label">Фон кнопки</span>
+                  <div class="color-control">
+                    <input type="color" data-color-picker aria-label="Выбрать фон кнопки">
+                    <input name="button_background_color" type="text" maxlength="7">
+                  </div>
+                </div>
+                <div class="field" data-color-field="button_text_color">
+                  <span class="field__label">Текст кнопки</span>
+                  <div class="color-control">
+                    <input type="color" data-color-picker aria-label="Выбрать текст кнопки">
+                    <input name="button_text_color" type="text" maxlength="7">
+                  </div>
+                </div>
+                <div class="field" data-color-field="share_background_color">
+                  <span class="field__label">Фон Share</span>
+                  <div class="color-control">
+                    <input type="color" data-color-picker aria-label="Выбрать фон Share">
+                    <input name="share_background_color" type="text" maxlength="7">
+                  </div>
+                </div>
+                <div class="field" data-color-field="share_icon_color">
+                  <span class="field__label">Иконка Share</span>
+                  <div class="color-control">
+                    <input type="color" data-color-picker aria-label="Выбрать иконку Share">
+                    <input name="share_icon_color" type="text" maxlength="7">
+                  </div>
+                </div>
+                <div class="field" data-color-field="image_background_color">
+                  <span class="field__label">Фон изображения</span>
+                  <div class="color-control">
+                    <input type="color" data-color-picker aria-label="Выбрать фон изображения">
+                    <input name="image_background_color" type="text" maxlength="11">
+                  </div>
+                  <small>Допустимо слово transparent.</small>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <h2>Анимация</h2>
+              <div class="fields">
+                <div class="field">
+                  <label class="switch" for="animation_enabled">
+                    <input id="animation_enabled" name="animation_enabled" type="checkbox">
+                    <span>Разворачивание билета</span>
+                  </label>
+                </div>
+                <div class="field">
+                  <label for="animation_duration_ms">Длительность, мс</label>
+                  <input
+                    id="animation_duration_ms"
+                    name="animation_duration_ms"
+                    type="number"
+                    min="400"
+                    max="4000"
+                    step="50"
+                  >
+                </div>
+              </div>
+            </section>
+
+            <div class="actions">
+              <button class="button button--secondary" id="reloadButton" type="button">
+                Отменить изменения
+              </button>
+              <button class="button" id="saveButton" type="submit">
+                Сохранить и опубликовать
+              </button>
+            </div>
+          </form>
+
+          <aside class="panel preview-panel" aria-label="Предпросмотр">
+            <div class="preview-head">
+              <h2>Предпросмотр</h2>
+              <div class="segmented" role="group" aria-label="Размер предпросмотра">
+                <button class="is-active" type="button" data-preview-mode="desktop">ПК</button>
+                <button type="button" data-preview-mode="mobile">Мобильный</button>
+              </div>
+            </div>
+            <div class="preview-stage" id="previewStage">
+              <div class="preview-ticket" id="previewTicket">
+                <div class="p-info">
+                  <div class="p-price-row">
+                    <span class="p-price" id="pPrice"></span>
+                    <span class="p-share" aria-hidden="true">↥</span>
+                  </div>
+                  <div class="p-address" id="pAddress"></div>
+                  <div class="p-title" id="pTitle"></div>
+                </div>
+                <div class="p-art">
+                  <img id="pImage" alt="" hidden>
+                  <span id="pImagePlaceholder">Изображение</span>
+                </div>
+                <div class="p-stub">
+                  <div class="p-date">
+                    <small id="pTime"></small>
+                    <strong id="pDay"></strong>
+                    <span id="pMonth"></span>
+                  </div>
+                  <div class="p-button" id="pButton"></div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      (() => {
+        "use strict";
+
+        const MONTHS = [
+          "ЯНВАРЯ", "ФЕВРАЛЯ", "МАРТА", "АПРЕЛЯ", "МАЯ", "ИЮНЯ",
+          "ИЮЛЯ", "АВГУСТА", "СЕНТЯБРЯ", "ОКТЯБРЯ", "НОЯБРЯ", "ДЕКАБРЯ"
+        ];
+
+        const loginView = document.getElementById("loginView");
+        const workspace = document.getElementById("workspace");
+        const loginForm = document.getElementById("loginForm");
+        const configForm = document.getElementById("configForm");
+        const loginButton = document.getElementById("loginButton");
+        const saveButton = document.getElementById("saveButton");
+        const reloadButton = document.getElementById("reloadButton");
+        const loginMessage = document.getElementById("loginMessage");
+        const updatedAt = document.getElementById("updatedAt");
+        const toast = document.getElementById("toast");
+        const previewStage = document.getElementById("previewStage");
+        const previewTicket = document.getElementById("previewTicket");
+        let password = "";
+        let serverConfig = null;
+        let toastTimer = 0;
+
+        function serverCall(method, ...args) {
+          return new Promise((resolve, reject) => {
+            google.script.run
+              .withSuccessHandler(resolve)
+              .withFailureHandler((error) => reject(new Error(error.message || String(error))))
+              [method](...args);
+          });
+        }
+
+        function setBusy(button, busy, busyText, normalText) {
+          button.disabled = busy;
+          button.textContent = busy ? busyText : normalText;
+        }
+
+        function showToast(message) {
+          toast.textContent = message;
+          toast.classList.add("is-visible");
+          window.clearTimeout(toastTimer);
+          toastTimer = window.setTimeout(
+            () => toast.classList.remove("is-visible"),
+            2600
+          );
+        }
+
+        function formatUpdated(value) {
+          if (!value) return "Изменений ещё не было";
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) return String(value);
+          return `Обновлено ${date.toLocaleString("ru-RU")}`;
+        }
+
+        function fillForm(config) {
+          serverConfig = { ...config };
+          Array.from(configForm.elements).forEach((element) => {
+            if (!element.name || !(element.name in config)) return;
+            if (element.type === "checkbox") {
+              element.checked = Boolean(config[element.name]);
+            } else {
+              element.value = config[element.name] ?? "";
+            }
+          });
+
+          syncAllColorPickers();
+          document.getElementById("textureOpacityValue").textContent =
+            Number(config.texture_opacity ?? 0).toFixed(2);
+          updatedAt.textContent = formatUpdated(config.updated_at);
+          updatePreview();
+        }
+
+        function collectForm() {
+          const data = {};
+          const formData = new FormData(configForm);
+          for (const [key, value] of formData.entries()) data[key] = value;
+          data.animation_enabled =
+            document.getElementById("animation_enabled").checked;
+          data.texture_opacity = Number(data.texture_opacity);
+          data.animation_duration_ms = Number(data.animation_duration_ms);
+          return data;
+        }
+
+        function syncAllColorPickers() {
+          document.querySelectorAll("[data-color-field]").forEach((group) => {
+            const text = group.querySelector('input[type="text"]');
+            const picker = group.querySelector("[data-color-picker]");
+            if (/^#[0-9a-f]{6}$/i.test(text.value)) picker.value = text.value;
+          });
+        }
+
+        function connectColorPickers() {
+          document.querySelectorAll("[data-color-field]").forEach((group) => {
+            const text = group.querySelector('input[type="text"]');
+            const picker = group.querySelector("[data-color-picker]");
+            picker.addEventListener("input", () => {
+              text.value = picker.value.toUpperCase();
+              text.dispatchEvent(new Event("input", { bubbles: true }));
+            });
+            text.addEventListener("input", () => {
+              if (/^#[0-9a-f]{6}$/i.test(text.value)) picker.value = text.value;
+            });
+          });
+        }
+
+        function dateParts(isoDate) {
+          const match = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(isoDate || "");
+          if (!match) return { day: "—", month: "" };
+          return {
+            day: match[3],
+            month: MONTHS[Number(match[2]) - 1] || ""
+          };
+        }
+
+        function safePreviewUrl(value) {
+          try {
+            const url = new URL(String(value || ""));
+            return url.protocol === "https:" ? url.href : "";
+          } catch (_) {
+            return "";
+          }
+        }
+
+        function cssImage(value) {
+          const url = safePreviewUrl(value);
+          return url ? `url("${url.replace(/["\\\\\\n\\r]/g, "")}")` : "none";
+        }
+
+        function updatePreview() {
+          const data = collectForm();
+          const parts = dateParts(data.date_iso);
+          document.getElementById("pPrice").textContent = data.price || "";
+          document.getElementById("pAddress").textContent = data.address || "";
+          document.getElementById("pTitle").textContent = data.game_title || "";
+          document.getElementById("pTime").textContent = data.time || "";
+          document.getElementById("pDay").textContent = parts.day;
+          document.getElementById("pMonth").textContent = parts.month;
+          document.getElementById("pButton").textContent = data.button_label || "";
+
+          const image = document.getElementById("pImage");
+          const placeholder = document.getElementById("pImagePlaceholder");
+          const imageUrl = safePreviewUrl(data.image_url);
+          if (imageUrl) {
+            image.src = imageUrl;
+            image.hidden = false;
+            placeholder.hidden = true;
+          } else {
+            image.removeAttribute("src");
+            image.hidden = true;
+            placeholder.hidden = false;
+          }
+
+          const variables = {
+            "--p-ticket": data.ticket_background_color,
+            "--p-price": data.price_color,
+            "--p-title": data.title_color,
+            "--p-address": data.address_color,
+            "--p-date-bg": data.date_background_color,
+            "--p-date-text": data.date_text_color,
+            "--p-button-bg": data.button_background_color,
+            "--p-button-text": data.button_text_color,
+            "--p-share-bg": data.share_background_color,
+            "--p-share-icon": data.share_icon_color,
+            "--p-image-bg": data.image_background_color,
+            "--p-texture": cssImage(data.texture_url),
+            "--p-texture-opacity": String(data.texture_opacity),
+            "--p-font": data.font_family || "Arial, sans-serif"
+          };
+          Object.entries(variables).forEach(([name, value]) => {
+            previewTicket.style.setProperty(name, value || "");
+          });
+
+          document.getElementById("textureOpacityValue").textContent =
+            Number(data.texture_opacity || 0).toFixed(2);
+        }
+
+        loginForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          password = document.getElementById("adminPassword").value;
+          loginMessage.textContent = "";
+          setBusy(loginButton, true, "Проверяем…", "Открыть настройки");
+
+          try {
+            const config = await serverCall("getAdminConfig", password);
+            fillForm(config);
+            loginView.hidden = true;
+            workspace.hidden = false;
+          } catch (error) {
+            password = "";
+            loginMessage.textContent = error.message;
+          } finally {
+            setBusy(loginButton, false, "Проверяем…", "Открыть настройки");
+          }
+        });
+
+        configForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          if (!configForm.reportValidity()) return;
+          setBusy(saveButton, true, "Сохраняем…", "Сохранить и опубликовать");
+
+          try {
+            const saved = await serverCall("saveAdminConfig", collectForm(), password);
+            fillForm(saved);
+            showToast("Настройки опубликованы");
+          } catch (error) {
+            showToast(error.message);
+          } finally {
+            setBusy(saveButton, false, "Сохраняем…", "Сохранить и опубликовать");
+          }
+        });
+
+        reloadButton.addEventListener("click", () => {
+          if (!serverConfig) return;
+          fillForm(serverConfig);
+          showToast("Несохранённые изменения отменены");
+        });
+
+        configForm.addEventListener("input", updatePreview);
+        document.getElementById("pImage").addEventListener("error", () => {
+          document.getElementById("pImage").hidden = true;
+          document.getElementById("pImagePlaceholder").hidden = false;
+        });
+
+        document.querySelectorAll("[data-preview-mode]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const isMobile = button.dataset.previewMode === "mobile";
+            previewStage.classList.toggle("is-mobile", isMobile);
+            document.querySelectorAll("[data-preview-mode]").forEach((item) => {
+              item.classList.toggle("is-active", item === button);
+            });
+          });
+        });
+
+        connectColorPickers();
+      })();
+    </script>
+  </body>
+</html>

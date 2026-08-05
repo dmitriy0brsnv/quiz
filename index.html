@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Next Game Ticket — локальная проверка</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-width: 320px;
+        background: #000;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        color: #fff;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        width: min(92vw, 1180px);
+        margin: 0 auto;
+        padding: 24px 0 8px;
+      }
+
+      header strong {
+        display: block;
+        font-size: clamp(18px, 2vw, 28px);
+      }
+
+      header small {
+        display: block;
+        margin-top: 5px;
+        color: #a9a1ae;
+      }
+
+      .controls {
+        display: flex;
+        gap: 8px;
+      }
+
+      button {
+        padding: 10px 14px;
+        border: 1px solid #4b4151;
+        border-radius: 999px;
+        background: #17131b;
+        color: #fff;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      button:hover {
+        border-color: #d9ff62;
+      }
+
+      .note {
+        width: min(92vw, 1180px);
+        margin: 0 auto;
+        padding: 0 0 40px;
+        color: #8d8593;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 639px) {
+        header {
+          align-items: flex-start;
+          padding-top: 16px;
+        }
+
+        .controls {
+          flex-direction: column;
+        }
+      }
+    </style>
+    <script>
+      window.NEXT_GAME_TICKET_CONFIG = {
+        endpoint: "",
+        fallback: {
+          price: "800₽",
+          game_title: "МЕЛО\nМАНИЯ",
+          address: "ул. Квизалендова, 19",
+          image_url: "../assets/sample-game.svg",
+          image_alt: "Персонаж музыкальной викторины",
+          date_iso: "2026-07-13",
+          date_day: "13",
+          date_month: "ИЮЛЯ",
+          time: "13:00",
+          button_label: "ИДУ ИГРАТЬ",
+          button_url: "https://example.com/registration",
+          share_url: "https://example.com/game",
+          texture_url: "../assets/paper-texture.svg",
+          texture_opacity: 0.22,
+          image_background_color: "transparent",
+          animation_duration_ms: 1200
+        }
+      };
+    </script>
+    <script src="../widget/ticket-widget.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <span>
+        <strong>Next Game Ticket</strong>
+        <small>Локальная проверка адаптива</small>
+      </span>
+      <span class="controls">
+        <button id="longText" type="button">Длинный текст</button>
+        <button id="normalText" type="button">Обычный текст</button>
+      </span>
+    </header>
+
+    <next-game-ticket id="ticket"></next-game-ticket>
+
+    <p class="note">
+      Контрольные ширины: 1440, 1200, 960, 640, 480, 375 и 320 px.
+      До 639 px билет переключается в вертикальную компоновку.
+    </p>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const ticket = document.getElementById("ticket");
+        document.getElementById("longText").addEventListener("click", () => {
+          ticket.applyConfig({
+            ...ticket.config,
+            price: "1 800₽",
+            game_title: "НЕВЕРОЯТНО ДЛИННОЕ НАЗВАНИЕ МУЗЫКАЛЬНОЙ ИГРЫ",
+            address:
+              "Набережная имени Очень Длинного Названия, дом 128, строение 14"
+          });
+        });
+        document.getElementById("normalText").addEventListener("click", () => {
+          ticket.applyConfig(window.NEXT_GAME_TICKET_CONFIG.fallback);
+        });
+      });
+    </script>
+  </body>
+</html>
