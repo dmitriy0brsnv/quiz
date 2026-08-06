@@ -184,17 +184,41 @@
       --fit-max: 82;
       min-width: 0;
       height: 100%;
-      padding-right: 0.16em;
       overflow: hidden;
       color: var(--price-color);
-      font-family: var(--ticket-font);
       font-size: clamp(32px, 6.3cqw, 82px);
       font-weight: 900;
       font-variant-numeric: tabular-nums;
-      font-kerning: normal;
-      letter-spacing: -0.015em;
+      letter-spacing: -0.055em;
       line-height: 0.9;
       white-space: nowrap;
+    }
+
+    /*
+     * Собственный знак рубля: кириллическая «Р» берётся из шрифта билета,
+     * поэтому символ не проваливается в визуально чужой системный fallback.
+     */
+    .ticket__currency {
+      position: relative;
+      display: inline-block;
+      font: inherit;
+      font-family: inherit;
+      font-size: 0.76em;
+      letter-spacing: 0;
+      line-height: 1;
+      vertical-align: 0.08em;
+    }
+
+    .ticket__currency::after {
+      content: "";
+      position: absolute;
+      top: 58%;
+      right: 0;
+      left: 0.04em;
+      height: 0.075em;
+      border-radius: 999px;
+      background: currentColor;
+      pointer-events: none;
     }
 
     .ticket__share {
@@ -1020,6 +1044,25 @@
     };
   }
 
+  function renderPrice(element, value) {
+    const text = String(value ?? "");
+    const parts = text.split("₽");
+    element.textContent = "";
+    element.setAttribute("aria-label", text);
+
+    parts.forEach((part, index) => {
+      element.append(document.createTextNode(part));
+      if (index >= parts.length - 1) return;
+
+      const currency = document.createElement("span");
+      currency.className = "ticket__currency";
+      currency.lang = "ru";
+      currency.setAttribute("aria-hidden", "true");
+      currency.textContent = "Р";
+      element.append(currency);
+    });
+  }
+
   function cacheKey(endpoint) {
     let hash = 2166136261;
     for (let index = 0; index < endpoint.length; index += 1) {
@@ -1236,7 +1279,7 @@
       this.config = normalizeConfig(input);
       const root = this.shadowRoot;
 
-      root.querySelector('[data-field="price"]').textContent = this.config.price;
+      renderPrice(root.querySelector('[data-field="price"]'), this.config.price);
       root.querySelector('[data-field="game_title"]').textContent = this.config.game_title;
       root.querySelector('[data-field="address"]').textContent = this.config.address;
       root.querySelector('[data-field="time"]').textContent = this.config.time;
